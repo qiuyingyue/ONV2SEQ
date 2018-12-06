@@ -1,13 +1,13 @@
 ONV2SEQ: Biomimetic Perception Learning for Sketch Generation 
 =============================================================
-### codebase
+## codebase
   1 files that doesn't work and can be deleted: nn.py, mnist_classification.py
 
   2 training sketch-rnn: (model.py, sketch_rnn_train.py)
-	(1) python sketch_rnn_train.py --log_root=xxx --
+	(1) '''python sketch_rnn_train.py --log_root=xxx --'''
 	(2) Data file path: sketch:[data_dir]
   3 training sketch-pix2seq (model_cnn_encoder.py, sketch_rnn_train_image.py)
-        (1)python sketch_rnn_train_image.py --log_root=/home/qyy/workspace/models/cnn_encoder_5classes --resume_training=False --hparams='{"img_size":64}'
+        (1) '''python sketch_rnn_train_image.py --log_root=/home/qyy/workspace/models/cnn_encoder_5classes --resume_training=False --hparams='{"img_size":64}' '''
 	(2)You can also modify hparam(e.g. img_size, data_set) in model_dnn_encoder.py and other parameters(e.g.data_dir, log_root) in sketch_rnn_train_image.py  
 	(3) Data file path: sketch:[data_dir]/sketch, images in numpy: [data_dir]/image_64*64
  	    It can be modified in Line 156-157 in sketch_rnn_train_image.py
@@ -37,15 +37,15 @@ display_svg: generated sketch result (.svg)
 
   9 data_interpolate.py: 
 
-### Other directory 
-## display_image
+## Other directory 
+### display_image
 png version of display_svg
-## jupyter_demo
-## backup_models
+### jupyter_demo
+### backup_models
  good trained models for final result (important)
    e.g. dnn_encoder_5classes_pretrainedrnn_binocular: use dnn encoder; use pretrained decoder of sketch-rnn; binocular means onv for both eyes; training batch size is 500 for 5classes model
 
-## models
+### models
  trained models for self testing
 
 
