@@ -4,8 +4,8 @@ ONV2SEQ: Biomimetic Perception Learning for Sketch Generation
   1. files that doesn't work and can be deleted: nn.py, mnist_classification.py
 
   2. training sketch-rnn: (model.py, sketch_rnn_train.py)
-* ```python sketch_rnn_train.py --log_root=xxx --```
-* Data file path: sketch:[data_dir]
+        * ```python sketch_rnn_train.py --log_root=xxx --```
+        * Data file path: sketch:[data_dir]
 
   3. training sketch-pix2seq (model_cnn_encoder.py, sketch_rnn_train_image.py)
         * ```python sketch_rnn_train_image.py [--log_root=/home/qyy/workspace/models/cnn_encoder_5classes] [--resume_training=False] [--hparams='{"img_size":64}'] ```
