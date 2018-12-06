@@ -1,4 +1,6 @@
-codebase
+ONV2SEQ: Biomimetic Perception Learning for Sketch Generation 
+=============================================================
+### codebase
   1 files that doesn't work and can be deleted: nn.py, mnist_classification.py
 
   2 training sketch-rnn: (model.py, sketch_rnn_train.py)
@@ -35,12 +37,15 @@ display_svg: generated sketch result (.svg)
 
   9 data_interpolate.py: 
 
-Other directory 
-display_image: png version of display_svg
-jupyter_demo
-backup_models: good trained models for final result (important)
+### Other directory 
+## display_image
+png version of display_svg
+## jupyter_demo
+## backup_models
+ good trained models for final result (important)
    e.g. dnn_encoder_5classes_pretrainedrnn_binocular: use dnn encoder; use pretrained decoder of sketch-rnn; binocular means onv for both eyes; training batch size is 500 for 5classes model
 
-models: trained models for self testing
+## models
+ trained models for self testing
 
 
