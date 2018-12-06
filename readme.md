@@ -4,21 +4,21 @@ ONV2SEQ: Biomimetic Perception Learning for Sketch Generation
   1. files that doesn't work and can be deleted: nn.py, mnist_classification.py
 
   2. training sketch-rnn: (model.py, sketch_rnn_train.py)
-	..* ```python sketch_rnn_train.py --log_root=xxx --```
-	..* Data file path: sketch:[data_dir]
+	⋅⋅* ```python sketch_rnn_train.py --log_root=xxx --```
+	⋅⋅* Data file path: sketch:[data_dir]
 
   3. training sketch-pix2seq (model_cnn_encoder.py, sketch_rnn_train_image.py)
-        ..* ```python sketch_rnn_train_image.py [--log_root=/home/qyy/workspace/models/cnn_encoder_5classes] [--resume_training=False] [--hparams='{"img_size":64}'] ```
-	..* You can also modify hparam(e.g. img_size, data_set) in model_dnn_encoder.py and other parameters(e.g.data_dir, log_root) in sketch_rnn_train_image.py  
-	..* Data file path: sketch:[data_dir]/sketch, images in numpy: [data_dir]/image_64*64
+        ⋅⋅* ```python sketch_rnn_train_image.py [--log_root=/home/qyy/workspace/models/cnn_encoder_5classes] [--resume_training=False] [--hparams='{"img_size":64}'] ```
+	⋅⋅* You can also modify hparam(e.g. img_size, data_set) in model_dnn_encoder.py and other parameters(e.g.data_dir, log_root) in sketch_rnn_train_image.py  
+	⋅⋅* Data file path: sketch:[data_dir]/sketch, images in numpy: [data_dir]/image_64*64
  	    It can be modified in Line 156-157 in sketch_rnn_train_image.py
 
   4. training sketch-onv2seq (model_dnn_encoder.py, sketch_rnn_train_onv.py)
        Usage: 
-	..* ```python sketch_rnn_train_onv.py --log_root=/home/qyy/workspace/models/dnn_encoder_5classes --resume_training=False --pretrain_decoder=True --decoder_root=/home/qyy/workspace/backup_models/rnn_encoder_5classes_bs500 --hparams='{"onv_size":10000}' ```
-	..* ``` python sketch_rnn_train_onv.py --log_root=/home/qyy/workspace/models ```/dnn_encoder_5classes --resume_training=True
-	..* You can also modify hparam(e.g. onv_size, data_set) in model_dnn_encoder.py and other parameters(e.g.log_root, decoder_root) in sketch_rnn_train_onv.py
-	..*  Data file path: sketch:[data_dir]/sketch, onv from left eye: [data_dir]/onv_9936_thick, onv from right eye: [data_dir]/onv_9936_thick_right
+	⋅⋅* ```python sketch_rnn_train_onv.py --log_root=/home/qyy/workspace/models/dnn_encoder_5classes --resume_training=False --pretrain_decoder=True --decoder_root=/home/qyy/workspace/backup_models/rnn_encoder_5classes_bs500 --hparams='{"onv_size":10000}' ```
+	⋅⋅* ``` python sketch_rnn_train_onv.py --log_root=/home/qyy/workspace/models ```/dnn_encoder_5classes --resume_training=True
+	⋅⋅* You can also modify hparam(e.g. onv_size, data_set) in model_dnn_encoder.py and other parameters(e.g.log_root, decoder_root) in sketch_rnn_train_onv.py
+	⋅⋅*  Data file path: sketch:[data_dir]/sketch, onv from left eye: [data_dir]/onv_9936_thick, onv from right eye: [data_dir]/onv_9936_thick_right
          It can be modified in Line 153-155 in sketch_rnn_train_onv.py 
   
   5. onv_process.py: conovert png file to onv
