@@ -157,7 +157,6 @@ import matplotlib.pyplot as plt
 
 
 if __name__ == "__main__":
-  parser = argparse.ArgumentParser(description='Process some integers.')
 
   # input stroke
   file_path = '../data/sketch/sketchrnn_cat.full.npz'
