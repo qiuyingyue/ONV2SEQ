@@ -98,9 +98,11 @@ def strokes_to_npy(strokes, is_grey=True, size=64):
 	"""convert strokes to svg files and then to png files and then resize to size*size and return  numpy array"""
 	npy = []
 	print (type(strokes), strokes.shape)
-	index = 0
+	
 	for data in strokes:
 		#print (type(data), data.shape)
+		svg_filename = "tmp.svg"
+		png_filename = "tmp.png"
 		save_strokes(data, factor=0.5, padding=10, svg_filename=svg_filename)
 		convert_with_cairosvg(svg_filename, png_filename)
 		im = Image.open(png_filename)
@@ -115,15 +117,17 @@ def strokes_to_npy(strokes, is_grey=True, size=64):
 	print (npy.shape)
 	return npy
 		
-def strokes_to_png(strokes, classname, batchname, is_grey=True, size=600, padding=125, save_onv=False):
+def strokes_to_png(strokes, classname, batchname, png_filepath, size=600, padding=125, save_onv=False):
 	"""convert strokes to svg files and then to png files and then resize to size*size with padding arround 
 	    save the png files and return the numpy array"""
 	""" set save_ong to True to save the onv files"""
 
 	npy=[]
+	index = 0
 	for data in strokes:
+		svg_filename = "tmp.svg"
 		save_strokes(data, factor=0.5, padding=10, svg_filename=svg_filename)
-		dirname = os.path.join(data_filepath, "png_thick", classname, batchname)
+		dirname = os.path.join(png_filepath, classname, batchname)
 		if not os.path.exists(dirname):
 			os.makedirs(dirname)
 		png_filename = os.path.join(dirname, str(index) + ".png")
@@ -133,7 +137,7 @@ def strokes_to_png(strokes, classname, batchname, is_grey=True, size=600, paddin
 		padding_arr = (padding, padding, padding, padding)
 		new_im = ImageOps.expand(im, padding_arr, fill=(255, 255, 255))
 		new_im.save(png_filename)
-
+		index += 1
 		#array to onv
 		if (save_onv):
 			im2arr = np.array(new_im)#error
@@ -147,12 +151,10 @@ def strokes_to_png(strokes, classname, batchname, is_grey=True, size=600, paddin
 
 ### Data preprocessing on original sketch files to obtain conrresponding png/onv/numpy image
 def main1():
-	data_filepath = '/home/qyy/workspace/data/'
-	svg_filename = "tmp.svg"
-	png_filename = "tmp.png"
+	data_filepath = '../data/'
 	input_dirname = "sketch"
-	output_dirname = "" # 
-	is_grey = True
+	output_dirname = "testmain1" # change 
+	is_grey = True 
 	for f in os.listdir(os.path.join(data_filepath, input_dirname)):
 		print(f)
 		if ("full" in f):
@@ -161,6 +163,8 @@ def main1():
 		outfile = os.path.join(data_filepath, output_dirname, f)
 		if os.path.exists(outfile):
 			continue
+		if not os.path.exists(os.path.dirname(outfile)):
+			os.makedirs(os.path.dirname(outfile))
 
 		# load data
 		fname = os.path.join(data_filepath, input_dirname, f)
@@ -177,13 +181,15 @@ def main1():
 		resized_test_strokes = resize_strokes(test_strokes, size = 600)
 		np.savez(outfile, train=resized_train_strokes, valid=resized_valid_strokes,test=resized_test_strokes)'''
 
-		# (2)save the strokes into .png (and .onv optionally)
-		train_onv = strokes_to_png(train_strokes, classname, 'train', save_onv=False)
-		valid_onv = strokes_to_png(valid_strokes, classname, 'valid', save_onv=False)
-		test_onv = strokes_to_png(test_strokes, classname, 'test', save_onv=False)
-		np.savez(outfile, train=train_onv, valid = valid_onv, test = test_onv)
+		# (2)save the strokes into .png (and .onv optionally), intended for sketch-onv2seq
+		png_filepath = os.path.join(data_filepath, "testpng")
+		train_onv = strokes_to_png(train_strokes, classname, 'train', png_filepath=png_filepath, save_onv=False)
+		valid_onv = strokes_to_png(valid_strokes, classname, 'valid', png_filepath=png_filepath, save_onv=False)
+		test_onv = strokes_to_png(test_strokes, classname, 'test', png_filepath=png_filepath, save_onv=False)
+		if save_onv:
+			np.savez(outfile, train=train_onv, valid = valid_onv, test = test_onv)
 
-		# (3)save the strokes into numpy array of images
+		# (3)save the strokes into numpy array of images, intended for sketch-pix2seq
 		'''train_images = strokes_to_npy(train_strokes, is_grey)
 		valid_images = strokes_to_npy(valid_strokes, is_grey)
 		test_images = strokes_to_npy(test_strokes, is_grey)	
@@ -191,8 +197,8 @@ def main1():
 		
 ### convert .svg to .png from svg_filepath/dirname to png_filepath/dirname
 def main2():
-	svg_filepath = '/home/qyy/workspace/display_svg'
-	png_filepath = '/home/qyy/workspace/display_image'
+	svg_filepath = '../display_svg'
+	png_filepath = '../display_image'
 	svg_dirlist = ['original']
 	for dirname in svg_dirlist:
 		for f in os.listdir(os.path.join(svg_filepath, dirname)):
@@ -221,7 +227,7 @@ def gallery(array, ncols=3):
 
 ###place multiple images to a grid for display
 def main3():
-	source_path = '/home/qyy/workspace/display_image'
+	source_path = '../display_image'
 	dirlist = ['original', 'onv_left_resize', 'rnn_encoder_5classes_0.2','cnn_encoder_5classes_0.2',
 	'dnn_encoder_5classes_binocular_0.2','dnn_encoder_5classes_pretrainedrnn_binocular_0.2','dnn_encoder_5classes_pretrainedcnn_binocular_0.2']
 	'''idx_list = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 
@@ -253,6 +259,6 @@ def main3():
 	
 		
 if __name__ == "__main__":
-	#main1()
+	main1()
 	#main2()
-	main3()
+	#main3()

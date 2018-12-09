@@ -33,7 +33,7 @@ batch_size = 100
 image_size = 64
 
 # Load dataset
-data_dir = "/home/qyy/workspace/data"
+data_dir = "../data"
 model_params = sketch_rnn_model.get_default_hparams()
 datasets = load_dataset(data_dir, model_params, do_filter=False, contain_labels=True)
 

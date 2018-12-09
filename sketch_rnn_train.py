@@ -43,12 +43,12 @@ FLAGS = tf.app.flags.FLAGS
 
 tf.app.flags.DEFINE_string(
     'data_dir',
-    '/home/qyy/workspace/data/sketch',
+    '../data/sketch',
     'The directory in which to find the dataset specified in model hparams. '
     'If data_dir starts with "http://" or "https://", the file will be fetched '
     'remotely.')
 tf.app.flags.DEFINE_string(
-    'log_root', '/home/qyy/workspace/backup_models/rnn_encoder_5classes_bs500',
+    'log_root', '../backup_models/rnn_encoder_5classes_bs500',
     'Directory to store model checkpoints, tensorboard.')
 tf.app.flags.DEFINE_boolean(
     'resume_training', False,
@@ -135,7 +135,7 @@ def load_dataset(data_dir, model_params, inference_mode=False):
   test_strokes = None
 
   for dataset in datasets:
-    #data_filepath = '/home/qyy/workspace/data/sketchrnn_cat.npz'
+    #data_filepath = '../data/sketchrnn_cat.npz'
     #data = np.load(data_filepath)
     data_filepath = os.path.join(data_dir, dataset)
     if data_dir.startswith('http://') or data_dir.startswith('https://'):

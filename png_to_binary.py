@@ -1,7 +1,7 @@
 import cv2
 import os 
 
-data_path = "/home/qyy/workspace/data/png"
+data_path = "../data/png"
 
 for root, dirs, files  in os.walk(data_path):
 	cv2.namedWindow("ori")

@@ -45,12 +45,12 @@ FLAGS = tf.app.flags.FLAGS
 
 tf.app.flags.DEFINE_string(
     'data_dir',
-    '/home/qyy/workspace/data',
+    '../data',
     'The directory in which to find the dataset specified in model hparams. '
     'If data_dir starts with "http://" or "https://", the file will be fetched '
     'remotely.')
 tf.app.flags.DEFINE_string(
-    'log_root', '/home/qyy/workspace/models/temp/',
+    'log_root', '../models/temp/',
     'Directory to store model checkpoints, tensorboard.')
 tf.app.flags.DEFINE_boolean(
     'resume_training', True,

@@ -2,8 +2,8 @@
 import os
 import numpy as np
 from onv_process import show_onv
-data_path = "/home/qyy/workspace/data/onv_9936_thick"
-output_path = "/home/qyy/workspace/data/onv_9936_thick_binary"
+data_path = "../data/onv_9936_thick"
+output_path = "../data/onv_9936_thick_binary"
 
 def convert_to_binary(onv_batch):
 	print onv_batch.shape

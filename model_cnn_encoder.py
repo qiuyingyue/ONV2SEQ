@@ -25,7 +25,7 @@ import numpy as np
 import tensorflow as tf
 
 from tf_lib import HParams
-import rnn, nn
+import rnn
 
 
 def copy_hparams(hparams):

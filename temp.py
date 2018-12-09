@@ -24,7 +24,15 @@ import tensorflow as tf
 from six.moves import xrange 
 
 
-# In[4]:
+# In[1]
+
+"""Blocks in use: from [1] to [20]: 
+ need modifications to test different models: In[7] [10] [11] [20]
+
+
+"""
+
+# In[2]:
 
 
 # libraries required for visualisation:
@@ -67,22 +75,24 @@ tf.logging.info("TensorFlow Version: %s", tf.__version__)
 
 # import our command line tools
 
-# for testing sketch-rnn
-from sketch_rnn_train import *
-from model import *
-'''# for testing sketch-onv2seq
-from sketch_rnn_train_onv import *
-from model_dnn_encoder import *
-'''
-'''# for testing sketch-pix2seq
+# (1) for testing sketch-rnn
+'''from sketch_rnn_train import *
+from model import *'''
+
+# (2) for testing sketch-pix2seq
 from sketch_rnn_train_image import *
 from model_cnn_encoder import *
+
+
+'''# (3) for testing sketch-onv2seq
+from sketch_rnn_train_onv import *
+from model_dnn_encoder import *
 '''
 from utils import *
 from rnn import *
 
 
-# In[7]:
+# In[8]:
 def draw_helper(data, factor, min_x, max_x, min_y, max_y, svg_filename, padding=50):
   diff_x = max_x - min_x
   diff_y = max_y - min_y
@@ -127,7 +137,7 @@ def draw_strokes_sequence(data, factor, svg_prefix):
   
   
 
-# In[8]:
+# In[9]:
 # little function that displays vector images and saves them to .svg
 def draw_strokes(data, factor=0.2, svg_filename = '/tmp/sketch_rnn/svg/sample.svg', padding=50):
   tf.gfile.MakeDirs(os.path.dirname(svg_filename))
@@ -209,32 +219,38 @@ def make_grid_svg(s_list, grid_space=10.0, grid_space_x=16.0):
 
 # define the path of the model you want to load, and also the path of the dataset
 
-# In[105]:
+# In[10]:
 
 ## change data directory for testing
-data_dir = '/home/qyy/workspace/data/sketch'#add sketch for sketch-rnn model
-models_root_dir = '/home/qyy/workspace/backup_models'
-model_dir = os.path.join(models_root_dir, 'rnn_encoder_5classes_bs500')#'dnn_encoder_5classes_pretrainedcnn_binocular')#cat_bus_rnn_encoder_pretrained/
+data_dir = '../data'#add '/sketch' for sketch-rnn model and remove '/sketch' for sketch-pix2seq and sketch-onv2seq
+models_root_dir = '../backup_models'
+model_dir = os.path.join(models_root_dir, 'cnn_encoder_5classes')#'dnn_encoder_5classes_pretrainedcnn_binocular')#cat_bus_rnn_encoder_pretrained/
 
 ##cat_bus_cnn_encoder_lr0.001_bs400_64*64
 
 
-# In[106]:
+# In[11]:
 
 ## change returned data
-#[train_set, valid_set, test_set, hps_model, eval_hps_model, sample_hps_model, train_images, valid_images, test_images] = load_env(data_dir, model_dir)
+# (1) testing sketch-rnn
+# [train_set, valid_set, test_set, hps_model, eval_hps_model, sample_hps_model] = load_env(data_dir, model_dir)
+
+# (2) testing sketch-pix2seq
+[train_set, valid_set, test_set, hps_model, eval_hps_model, sample_hps_model, train_images, valid_images, test_images] = load_env(data_dir, model_dir)
+
+# (3) testing sketch-onv2seq
 #[train_set, valid_set, test_set, hps_model, eval_hps_model, sample_hps_model, 
 # train_onvs_left, valid_onvs_left, test_onvs_left,  train_onvs_right, valid_onvs_right, test_onvs_right] = load_env(data_dir, model_dir)
-[train_set, valid_set, test_set, hps_model, eval_hps_model, sample_hps_model] = load_env(data_dir, model_dir)
 
 
-# In[107]:
+
+# In[12]:
 
 
 download_pretrained_models(models_root_dir=models_root_dir)
 
 
-# In[108]:
+# In[13]:
 
 
 # construct the sketch-rnn model here:
@@ -244,14 +260,14 @@ eval_model = Model(eval_hps_model, reuse=True)
 sample_model = Model(sample_hps_model, reuse=True)
 
 
-# In[109]:
+# In[14]:
 
 
 sess = tf.InteractiveSession()
 sess.run(tf.global_variables_initializer())
 
 
-# In[110]:
+# In[15]:
 
 
 # loads the weights from checkpoint into our model
@@ -260,14 +276,13 @@ load_checkpoint(sess, model_dir)
 
 # We define two convenience functions to encode a stroke into a latent vector, and decode from latent vector to stroke.
 
-# In[111]:
+# In[16]:
 
 
 def encode(input_strokes):
   with tf.gfile.Open(os.path.join(model_dir, 'model_config.json'), 'r') as f:
     model_param = json.load(f)
     max_seq_len = int(model_param['max_seq_len'])
-    print max_seq_len
   strokes = to_big_strokes(input_strokes, max_seq_len).tolist()
   strokes.insert(0, [0, 0, 1, 0, 0])
   seq_len = [len(input_strokes)]
@@ -275,7 +290,7 @@ def encode(input_strokes):
   return sess.run(eval_model.batch_z, feed_dict={eval_model.input_data: [strokes], eval_model.sequence_lengths: seq_len})[0]
 
 
-# In[112]:
+# In[17]:
 
 
 def encode_image(image):
@@ -284,7 +299,7 @@ def encode_image(image):
   return sess.run(eval_model.batch_z, feed_dict={eval_model.img_data: [image]})[0]
 
 
-# In[113]:
+# In[18]:
 
 def encode_onv(onv):
   with tf.gfile.Open(os.path.join(model_dir, 'model_config.json'), 'r') as f:
@@ -296,8 +311,8 @@ def encode_binocular_onv(onv_left, onv_right):
     model_param = json.load(f)  
   return sess.run(eval_model.batch_z, feed_dict={eval_model.onv_data_left: [onv_left],eval_model.onv_data_right: [onv_right] })[0]
   
-# In[114]:
-def decode(z_input=None, draw_mode=True, temperature=0.1, factor=0.05, filename='test.svg'):
+# In[19]:
+def decode(z_input=None, draw_mode=True, temperature=0.1, factor=0.05, modelname='test', filename='test.svg'):
   z = None
   if z_input is not None:
     z = [z_input]
@@ -306,13 +321,13 @@ def decode(z_input=None, draw_mode=True, temperature=0.1, factor=0.05, filename=
   
   strokes = to_normal_strokes(sample_strokes)
   if draw_mode:
-    draw_strokes(strokes, factor, os.path.join('/home/qyy/workspace/test/rnn_encoder_5classes_0.2',filename))
+    draw_strokes(strokes, factor, os.path.join('../display_svg/', modelname, filename))
   return strokes
 
 
 # Let's try to encode the sample stroke into latent vector $z$
 
-# In[125]: 
+# In[20]: 
 
 # test single image (1) (2)
 # (1) testing for sketch-rnn sequence
@@ -336,139 +351,32 @@ test_indices =list(indices) + list(indices+2500) + list(indices+5000) + list(ind
 print (test_indices)
 # test batch images (1) (2)
 for index in test_indices:
+    # save .svg of original sketch
+    #draw_strokes(test_set.strokes[index], 0.02, '../display_svg/original/'+str(index)+'.svg')
     
-    draw_strokes(test_set.strokes[index], 0.02, '/home/qyy/workspace/test/original/'+str(index)+'.svg')
+    # (1) testing for sketch-rnn
+    '''stroke = test_set.strokes[index]
+    z = encode(stroke)'''
     
-    # (1) testing for sketch-onv2seq
+    
+    # (2) testing for sketch-pix2seq
+    sample_image = np.copy(test_images[index])
+    display(Image.fromarray(sample_image))
+    sample_image = np.resize(sample_image,(64,64,1))
+    z = encode_image(sample_image)
+    
+    
+    # (3) testing for sketch-onv2seq
     '''sample_onv_left = np.copy(test_onvs_left[index])
     sample_onv_right = np.copy(test_onvs_right[index])
     show_onv(sample_onv_left)
     show_onv(sample_onv_right, '/home/qyy/workspace/display_image/onv_right/'+str(index)+'.png')
     z = encode_binocular_onv(sample_onv_left, sample_onv_right)'''
-    
-    # (2) testing for sketch-pix2seq
-    '''sample_image = np.copy(test_images[index])
-    display(Image.fromarray(sample_image))
-    sample_image = np.resize(sample_image,(64,64,1))
-    z = encode_image(sample_image)'''
-    
-    # (3) testing for sketch-rnn
-    #stroke = test_set.strokes[index]
-    #z = encode(stroke)
-    
    
-    decoded_stroke = decode(z, temperature=0.2, filename=str(index)+'.svg') 
+    decoded_stroke = decode(z, temperature=0.2, modelname='cnn_encoder_5classes_0.2', filename=str(index)+'.svg') 
     
-     # draw image sequences
+    # draw image sequences
     #draw_strokes_sequence(decoded_stroke, factor=0.02, svg_prefix='/home/qyy/workspace/test/image_sequence_0.02/'+str(index))
   
-   
-# In[390]:
-'''import numpy as np
-import matplotlib.pyplot as plt
-from PIL import Image
-
-display_image_root = '/home/qyy/workspace/display_image'
-
-def gallery(array, ncols=3):
-    nindex, height, width, intensity = array.shape
-    nrows = nindex//ncols
-    assert nindex == nrows*ncols
-    # want result.shape = (height*nrows, width*ncols, intensity)
-    result = (array.reshape(nrows, ncols, height, width, intensity)
-              .swapaxes(1,2)
-              .reshape(height*nrows, width*ncols, intensity))
-    return result
-
-def make_array():
-    from PIL import Image
-    return np.array([np.asarray(Image.open('face.png').convert('RGB'))]*12)
-
-image_list=[]    
-indices = np.array([0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95])
-test_indices =list(indices) + list(indices+2500) + list(indices+5000) + list(indices+7500)+ list(indices+10000)
-
-for dirname in os.listdir(display_image_root):
-    for index in test_indices:
-        fname = os.path.join(display_image_root, dirname, str(index)+'.png')
-        image_arr = np.array(Image.open(fname))
-        image_list.append(image_arr)
-    
-
-result = gallery(np.array(image_list), ncols=len(test_indices))
-plt.imshow(result)
-plt.show()'''
-
-# In[126]:  
-
-
-_ = decode(z, temperature=0.2) # convert z back to drawing at temperature of 0.8
-
-
-# Create generated grid at various temperatures from 0.1 to 1.0
-
-# In[127]:
-
-
-stroke_list = []
-for i in range(10):
-  stroke_list.append([decode(z, draw_mode=False, temperature=0.1*i+0.1), [0, i]])
-stroke_grid = make_grid_svg(stroke_list)
-draw_strokes(stroke_grid)
-
-
-# Latent Space Interpolation Example between $z_0$ and $z_1$
-
-# In[39]:
-
-
-# get a sample drawing from the test set, and render it to .svg
-z0 = z
-_ = decode(z0)
-
-
-# Now we interpolate between sheep $z_0$ and sheep $z_1$
-
-# In[40]:
-
-
-#stroke = test_set.random_sample()
-
-another_image = np.copy(random.choice(test_images))
-display(Image.fromarray(another_image))
-print (another_image.shape)
-another_image.resize((64,64,1))
-
-# In[41]:
-z1 = encode_image(another_image)
-_ = decode(z1)
-
-# In[387]:
-
-
-z_list = [] # interpolate spherically between z0 and z1
-N = 10
-for t in np.linspace(0, 1, N):
-  z_list.append(slerp(z0, z1, t))
-
-
-# In[388]:
-
-
-# for every latent vector in z_list, sample a vector image
-reconstructions = []
-for i in range(N):
-  reconstructions.append([decode(z_list[i], draw_mode=False), [0, i]])
-
-
-# In[389]:
-
-
-stroke_grid = make_grid_svg(reconstructions)
-draw_strokes(stroke_grid)
-
-
-# Let's load the Flamingo Model, and try Unconditional (Decoder-Only) Generation
-
-
+print ("Decoding finished")
 

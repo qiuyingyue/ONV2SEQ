@@ -161,7 +161,7 @@ def show_onv(onv, filename=None):
         h5f = h5py.File(os.path.join(save_dir, '%s.h5'%f), 'w')
         h5f.create_dataset('data', data=np.transpose(result), compression="gzip", compression_opts=9)
         h5f.close()
-process(file_dir = '/home/qyy/workspace/data/testimage', save_dir = '/home/qyy/workspace/data/testonv')'''
+process(file_dir = '../data/testimage', save_dir = '../data/testonv')'''
 
 def png_to_onv(file_dir, onv_filepath):
 
@@ -214,9 +214,9 @@ def png_to_onv(file_dir, onv_filepath):
             os.makedirs(onv_filepath)
         np.savez(outfile, train=train_onv, valid=valid_onv,test=test_onv)
 
-        # data = np.load("/home/qyy/workspace/data/onv/sketchrnn_rabbit.npz")
+        # data = np.load("../data/onv/sketchrnn_rabbit.npz")
         # plt.scatter(Y,-X, c=data["valid"][0]/255.0, cmap='gray', s=1, marker='.')
         # print (np.mean(data["valid"][0]))
         # plt.show()
 if __name__ == "__main__":
-    png_to_onv("/home/qyy/workspace/data/png_thick", "/home/qyy/workspace/data/onv_9936_thick_right")
+    png_to_onv("../data/png_thick", "../data/onv_9936_thick_right")

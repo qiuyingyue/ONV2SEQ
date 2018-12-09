@@ -46,12 +46,12 @@ FLAGS = tf.app.flags.FLAGS
 
 tf.app.flags.DEFINE_string(
     'data_dir',
-    '/home/qyy/workspace/data',
+    '../data',
     'The directory in which to find the dataset specified in model hparams. '
     'If data_dir starts with "http://" or "https://", the file will be fetched '
     'remotely.')
 tf.app.flags.DEFINE_string(
-    'log_root', '/home/qyy/workspace/backup_models/dnn_encoder_5classes_pretrainedrnn_binocular',
+    'log_root', '../backup_models/dnn_encoder_5classes_pretrainedrnn_binocular',
     'Directory to store model checkpoints, tensorboard.')
 tf.app.flags.DEFINE_boolean(
     'resume_training', False,
@@ -67,10 +67,10 @@ tf.app.flags.DEFINE_boolean(
     'pretrain_encoder', False,
     'set to true to load pretrained encoder')
 tf.app.flags.DEFINE_string(
-    'decoder_root', '/home/qyy/workspace/backup_models/rnn_encoder_5classes_bs500',#rnn_encoder_5classes_bs500',#cat_bus_cnn_encoder_lr0.001_bs400_64*64',
+    'decoder_root', '../backup_models/rnn_encoder_5classes_bs500',#rnn_encoder_5classes_bs500',#cat_bus_cnn_encoder_lr0.001_bs400_64*64',
     '')
 tf.app.flags.DEFINE_string(
-    'encoder_root', '/home/qyy/workspace/backup_models/onv_classification_model/',#cat_bus_cnn_encoder_lr0.001_bs400_64*64',
+    'encoder_root', '../backup_models/onv_classification_model/',#cat_bus_cnn_encoder_lr0.001_bs400_64*64',
     '')
 PRETRAINED_MODELS_URL = ('http://download.magenta.tensorflow.org/models/'
                          'sketch_rnn.zip')
