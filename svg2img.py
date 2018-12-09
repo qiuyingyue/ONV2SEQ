@@ -10,7 +10,7 @@ from utils import *
 from PIL import Image, ImageOps
 from tempfile import TemporaryFile
 #from scipy import misc
-#from onv_process import onv_convert_fromarr
+#from onv_process import onv_convert_fromarr, show_onv
 
 
 def save_strokes(data, factor=0.2, padding=10, svg_filename = '/tmp/sketch_rnn/svg/sample.svg'):
@@ -141,8 +141,9 @@ def strokes_to_png(strokes, classname, batchname, png_filepath, size=600, paddin
 		#array to onv
 		if (save_onv):
 			im2arr = np.array(new_im)#error
-			misc.imshow(im2arr)
+			#misc.imshow(im2arr)
 			onv = onv_convert_fromarr(im2arr)#eerror
+			show_onv(onv)
 			npy.append(onv)
 		
 	npy = np.array(npy)
