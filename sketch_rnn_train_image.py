@@ -301,7 +301,7 @@ def evaluate_model(sess, model, data_set, data_img):
     for count, id_count in enumerate(indices):
        valid_img_batch[count,:,:,0] = data_img[id_count]
     #feed = {model.input_data: x, model.sequence_lengths: s}
-    feed = {model.input_data: x, model.sequence_lengths: s, model.img_data: valid_img_batch, model.phase: False}
+    feed = {model.input_data: x, model.sequence_lengths: s, model.img_data: valid_img_batch}
     (cost, r_cost,
      kl_cost) = sess.run([model.cost, model.r_cost, model.kl_cost], feed)
     total_cost += cost
@@ -386,8 +386,7 @@ def train(sess, model, eval_model, train_set, valid_set, test_set, train_img, va
         model.sequence_lengths: s,
         model.lr: curr_learning_rate,
         model.kl_weight: curr_kl_weight,
-        model.img_data: train_img_batch,
-        model.phase: True
+        model.img_data: train_img_batch
     }
     
     
