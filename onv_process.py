@@ -40,7 +40,7 @@ factor = R/8 #R/8
 Tfactor = 5  #1
 #read noise file
 ovn_size = R*T/Tfactor
-csvfilename = "noise_"+str(ovn_size)+"_0.15_right.csv"
+csvfilename = "noise_"+str(ovn_size)+"_0.15_right.csv"     #left eye: noise_onv_0.15.csv; right eye: noise_onv_0.15_right.csv
 if (os.path.exists(csvfilename)):
     print ("reading noise from", csvfilename)
     #gernerated from: np.random.normal(0, 0.1, R*T)
